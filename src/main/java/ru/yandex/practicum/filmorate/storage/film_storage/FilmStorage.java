@@ -6,6 +6,8 @@ import java.util.Map;
 
 public interface FilmStorage {
     Film createFilm(Film film);
+
     Film updateFilm(Film film);
+
     Map<Integer, Film> getFilms();
 }
