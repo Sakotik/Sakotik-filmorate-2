@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film_storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user_storage.UserStorage;
@@ -83,28 +81,6 @@ public class FilmService {
         return film;
     }
 
-    public Genre getGenre(int id) {
-        Map<Integer, Genre> genres = filmStorage.getGenres();
-        if (!genres.containsKey(id))
-            throw new ObjectNotFoundException("Жанр с id=" + id + " не найден");
-        return genres.get(id);
-    }
-
-    public Map<Integer, Genre> getGenres() {
-        return filmStorage.getGenres();
-    }
-
-    public Mpa getMpa(int id) {
-        Map<Integer, Mpa> mpa = filmStorage.getMpa();
-        if (!mpa.containsKey(id))
-            throw new ObjectNotFoundException("Рейтинг с id=" + id + " не найден");
-        return mpa.get(id);
-    }
-
-    public Map<Integer, Mpa> getAllMpa() {
-        return filmStorage.getMpa();
-    }
-
     private void checkContains(int filmId, int userId) {
         if (!filmStorage.getFilms().containsKey(filmId))
             throw new ObjectNotFoundException("Film with id=" + filmId + " not found");
@@ -115,8 +91,8 @@ public class FilmService {
     private Map<String, Object> getFilmUser(int filmId, int userId) {
         checkContains(filmId, userId);
         Map<String, Object> result = new HashMap<>();
-        result.put("film", filmStorage.getFilms().get(filmId));
-        result.put("user", userStorage.getUsers().get(userId));
+        result.put("film", filmStorage.getFilm(filmId));
+        result.put("user", userStorage.getUser(userId));
         return result;
     }
 }

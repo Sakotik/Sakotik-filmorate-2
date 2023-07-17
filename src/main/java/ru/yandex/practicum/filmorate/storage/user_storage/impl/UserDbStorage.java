@@ -76,6 +76,14 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
+    public User getUser(int id) {
+        String sql = "SELECT * FROM USERS " +
+                     "WHERE USER_ID=?;";
+        List<User> userList = jdbcTemplate.query(sql, userMapper, id);
+        return userList.get(0);
+    }
+
+    @Override
     public Map<Integer, User> getUsers() {
         String getUsersSql = "SELECT * FROM USERS";
         List<User> users = jdbcTemplate.query(getUsersSql, userMapper);

@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film_storage.FilmStorage;
 
 import java.util.HashMap;
@@ -38,13 +36,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Map<Integer, Genre> getGenres() {
-        return null;  //Если потребуется - добавлю реализацию этого метода в таком виде хранения
-    }
-
-    @Override
-    public Map<Integer, Mpa> getMpa() {
-        return null;  //Если потребуется - добавлю реализацию этого метода в таком виде хранения
+    public Film getFilm(int id) {
+        return films.get(id);
     }
 
     @Override

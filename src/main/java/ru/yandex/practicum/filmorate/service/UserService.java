@@ -85,20 +85,19 @@ public class UserService {
         return user1;
     }
 
-    private Map<String, User> getTwoUsers(int id_1, int id_2) {
+    private Map<String, User> getTwoUsers(int id1, int id2) {
         Map<Integer, User> users = userStorage.getUsers();
-        if (!users.containsKey(id_1))
-            throw new ObjectNotFoundException("Пользователь с id=" + id_1 + " не найден");
-        if (!users.containsKey(id_2))
-            throw new ObjectNotFoundException("Пользователь с id=" + id_2 + " не найден");
-        User user1 = users.get(id_1);
-        User user2 = users.get(id_2);
+        if (!users.containsKey(id1))
+            throw new ObjectNotFoundException("Пользователь с id=" + id1 + " не найден");
+        if (!users.containsKey(id2))
+            throw new ObjectNotFoundException("Пользователь с id=" + id2 + " не найден");
+        User user1 = users.get(id1);
+        User user2 = users.get(id2);
 
         Map<String, User> result = new HashMap<>();
         result.put("user1", user1);
         result.put("user2", user2);
 
         return result;
-
     }
 }

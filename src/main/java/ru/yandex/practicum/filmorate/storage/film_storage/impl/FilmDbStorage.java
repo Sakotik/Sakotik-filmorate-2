@@ -54,15 +54,6 @@ public class FilmDbStorage implements FilmStorage {
         }
     };
 
-    private final RowMapper<Mpa> mpaMapper = new RowMapper<Mpa>() {
-        @Override
-        public Mpa mapRow(ResultSet rs, int rowNum) throws SQLException {
-            int id = rs.getInt("MPA_ID");
-            String name = rs.getString("NAME");
-            return new Mpa(id, name);
-        }
-    };
-
     private final RowMapper<User> userMapper = new RowMapper<User>() {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -132,23 +123,27 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Map<Integer, Genre> getGenres() {
-        String sql = "SELECT GENRE_ID, " +
-                "NAME " +
-                "FROM GENRE;";
-        List<Genre> genres = jdbcTemplate.query(sql, genreMapper);
-        log.info("Sent all genres");
-        return genres.stream()
-                .collect(Collectors.toMap(Genre::getId, Function.identity()));
-    }
-
-    @Override
-    public Map<Integer, Mpa> getMpa() {
-        String sql = "SELECT * FROM MPA";
-        List<Mpa> mpa = jdbcTemplate.query(sql, mpaMapper);
-        log.info("Sent all mpa");
-        return mpa.stream()
-                .collect(Collectors.toMap(Mpa::getId, Function.identity()));
+    public Film getFilm(int id) {
+        String getFilmSql = "SELECT F.FILM_ID AS F_ID, " +
+                "F.NAME AS F_NAME, " +
+                "F.DESCRIPTION AS DESCRIPTION, " +
+                "F.RELEASE_DATE AS RELEASE_DATE, " +
+                "F.DURATION AS DURATION, " +
+                "M.MPA_ID AS M_ID, " +
+                "M.NAME AS M_NAME " +
+                "FROM FILMS AS F " +
+                "INNER JOIN MPA AS M ON F.MPA_ID = M.MPA_ID " +
+                "WHERE F.FILM_ID=?;";
+        List<Film> filmList = jdbcTemplate.query(getFilmSql, filmMapper, id);
+        Film film = filmList.get(0);
+        String getGenresSql = "SELECT G.GENRE_ID, " +
+                "G.NAME " +
+                "FROM GENRE AS G " +
+                "INNER JOIN FILM_GENRE AS FG ON G.GENRE_ID=FG.GENRE_ID " +
+                "WHERE FG.FILM_ID=?";
+        List<Genre> genres = jdbcTemplate.query(getGenresSql, genreMapper, id);
+        film.getGenres().addAll(genres);
+        return film;
     }
 
     @Override
