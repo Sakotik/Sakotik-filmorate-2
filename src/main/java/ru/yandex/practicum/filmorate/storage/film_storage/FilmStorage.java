@@ -9,5 +9,7 @@ public interface FilmStorage {
 
     Film updateFilm(Film film);
 
+    Film getFilm(int id);
+
     Map<Integer, Film> getFilms();
 }
